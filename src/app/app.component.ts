@@ -5,6 +5,8 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {MatSort} from '@angular/material/sort';
 import * as XLSX from 'xlsx';
 import { Auditdashboard } from './models/auditdashboard';
+import { DropDownService } from './shared/drop-down-service';
+import { AuditDashboardService } from './shared/audit-dashboard-service';
 
 
 const ELEMENT_DATA: Auditdashboard[] = [
@@ -108,7 +110,8 @@ const ELEMENT_DATA: Auditdashboard[] = [
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  providers: [DropDownService,AuditDashboardService]
 })
 export class AppComponent {
   @ViewChild('fromdate', { read: MatInput,static: false}) fromdate: MatInput;
@@ -120,9 +123,17 @@ export class AppComponent {
   table: ElementRef;
   displayedColumns: string[] = ['entID', 'queueName', 'queueManager', 'messageID', 'logTime'];
   dataSource = new MatTableDataSource(ELEMENT_DATA);
+  dataSource1 = new MatTableDataSource(ELEMENT_DATA);
   pipe: DatePipe;
   pageSize = 5;
-
+  FilterqueueName =  {};
+  auditData = [];
+  constructor(private dropdownService: DropDownService, private auditDataService:AuditDashboardService) {
+    //this.FilterqueueName =dropdownService.QueueName;
+    console.log(dropdownService.QueueName)
+    console.log("constructor calling.." + this.fromDate + "--" + this.toDate);
+  }
+  
 filterForm = new FormGroup({
     fromDate: new FormControl(),
     toDate: new FormControl(),
@@ -132,9 +143,7 @@ get fromDate() { return this.filterForm.get('fromDate').value; }
 get toDate() { return this.filterForm.get('toDate').value; }
 get toRowString() { return this.filterForm.get('rowfilter').value; }
 
-  constructor() {
-    console.log("constructor calling.." + this.fromDate + "--" + this.toDate);
-  }
+  
   ExportTOExcel() {
     const skipData = this.paginator.pageSize * this.paginator.pageIndex;
     const pagedData = this.dataSource.sortData(this.dataSource.filteredData, this.dataSource.sort).filter((u, i) => i >= skipData)
@@ -148,8 +157,12 @@ get toRowString() { return this.filterForm.get('rowfilter').value; }
   this.fromdate.value = '';
   this.todate.value= '';
   this.dataSource.filter = '';
+  this.dataSource.data=this.dataSource1.data; 
   }
  ngOnInit(): void {
+    this.FilterqueueName = this.dropdownService.QueueName;
+
+    
     this.dataSourcePaginator = new MatTableDataSource<Auditdashboard>(ELEMENT_DATA);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort=this.sort;
@@ -169,6 +182,7 @@ get toRowString() { return this.filterForm.get('rowfilter').value; }
       }
   };
   }
+  
   applyCalenderFilter(){
     console.log("from date" + this.fromDate);
     console.log("to date" + this.toDate);
@@ -183,4 +197,23 @@ applyFilterSearchData(filterValue: string) {
    filterValue = filterValue.toLowerCase();
    this.dataSource.filter = JSON.stringify({queueName:filterValue});
  }
+ public selectedQueueName;
+ 
+ public valueSelected() {
+      var all=new String("ALL");
+      console.log("QUQUQ NAME::: " + this.selectedQueueName + "::  " + all)
+
+    if(this.selectedQueueName == all ) {
+      this.dataSource.data=this.dataSource1.data; 
+    }else{
+    this.dataSource.data=this.dataSource1.data;
+    console.log("selected queuename is" +this.selectedQueueName)
+    this.dataSource.data = this.dataSource.data.filter(item => item.queueName == this.selectedQueueName);
+    // this.dataSource.filter = JSON.stringify({queueName:this.selectedQueueName});
+    } 
+  console.log(this.dataSource.data)
+//  this.dataSource.data=this.dataSource1.data;
+    
+ }
+
 }

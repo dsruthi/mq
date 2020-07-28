@@ -30,12 +30,14 @@
    <button mat-button color="primary" class="primary" (click)="reset()">Reset</button>
   </div>
   </form>
-  <div class="example-header">
-    <mat-form-field>
-      <input matInput (keyup)="applyFilterSearchData($event.target.value)"  placeholder="Search">
-    </mat-form-field>
-  </div>
-<div class="example-container mat-elevation-z8" #TABLE>
+<div class="date-block__list">QueueName:
+  <select [(ngModel)]="selectedQueueName" (change)="valueSelected()">
+    <option  *ngFor="let item of FilterqueueName" >{{ item }}</option>
+  </select>
+</div>
+    &nbsp; &nbsp; &nbsp; &nbsp;
+
+  <div class="example-container mat-elevation-z8" #TABLE>
   <mat-table #table [dataSource]="dataSource"   matSort>
 
   <!-- entID Column -->
