@@ -1,0 +1,31 @@
+.example-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 500px;
+  min-width: 300px;
+  margin-bottom: 10px;
+}
+.head {
+  color:green;
+  font-size:x-large;
+}
+.mat-table {
+  overflow: auto;
+  max-height: 500px;
+  background-color: whitesmoke;
+}
+.make-gold {
+  background-color: gold
+}
+  .primary{
+    background:orange;
+    color:wheat;
+  }
+ .date-block{
+    display: flex;
+  }
+  .date-block__list{
+    flex-basis: 150px;
+    margin-right: 15px;
+  }
+
