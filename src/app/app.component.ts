@@ -122,6 +122,12 @@ export class AppComponent {
   @ViewChild('TABLE',{static: true})
   table: ElementRef;
   displayedColumns: string[] = ['entID', 'queueName', 'queueManager', 'messageID', 'logTime'];
+  
+  //ADD THIS CODE IN YOUR TS FILE
+  queueNames = ELEMENT_DATA;
+  optionValues = [];
+  
+  
   dataSource = new MatTableDataSource(ELEMENT_DATA);
   dataSource1 = new MatTableDataSource(ELEMENT_DATA);
   pipe: DatePipe;
@@ -130,6 +136,11 @@ export class AppComponent {
   auditData = [];
   constructor(private dropdownService: DropDownService, private auditDataService:AuditDashboardService) {
     //this.FilterqueueName =dropdownService.QueueName;
+    
+    //ADD THIS CODE IN YOUR CONSTRUCTOR 
+    this.optionValues = [...new Set(this.queueNames.map(a => a.queueName))];
+    
+    
     console.log(dropdownService.QueueName)
     console.log("constructor calling.." + this.fromDate + "--" + this.toDate);
   }
@@ -192,11 +203,17 @@ get toRowString() { return this.filterForm.get('rowfilter').value; }
     this.dataSource.filter = JSON.stringify({fromDate, toDate});
     }
 };
+//ADD THIS CODE IN YOUR TS FILE
 applyFilterSearchData(filterValue: string) {
-   filterValue = filterValue.trim(); 
-   filterValue = filterValue.toLowerCase();
-   this.dataSource.filter = JSON.stringify({queueName:filterValue});
+
+   filterValue = filterValue.trim(); // Remove whitespace
+   filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+   this.dataSource.filter = JSON.stringify({queueName: filterValue});
+
  }
+
+  
+  
  public selectedQueueName;
  
  public valueSelected() {
