@@ -1,88 +1,90 @@
-<div class="head">
-  Audit DashBoard:
-</div>
-<form class="date-block" [formGroup]="filterForm">
-	<div class="date-block__list">
-    <mat-form-field>
-      <input #fromdate matInput
-        [matDatepicker]="fromDate"
-        placeholder="From Date"
-        formControlName="fromDate">
-      <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
-      <mat-datepicker #fromDate></mat-datepicker>
-    </mat-form-field>
+div class="AddEmployeeTitleContainer">
+
+    <div class="addEmployeeTitleContainer">
+      <div >Add Config</div>
   </div>
-  	<div class="date-block__list">
-    <mat-form-field>
-      <input #todate matInput
-        [matDatepicker]="toDate"
-        placeholder="To Date"
-        formControlName="toDate">
-      <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
-      <mat-datepicker #toDate></mat-datepicker>
-    </mat-form-field>
+  <div class="addEmployeeBtnContainer">
+    <div class="addNewEmployeeBtn" (click)="addNewEmployeeBtn()">+</div>
   </div>
-  <div>
-   <button mat-button color="primary" class="primary" (click)="applyCalenderFilter()">Search</button>
   </div>
-  &nbsp;&nbsp;&nbsp;
-   <div>
-   <button mat-button color="primary" class="primary" (click)="reset()">Reset</button>
-  </div>
+  
+  <div *ngIf="newEmployeeClicked">
+  <div class="formWrapper">
+  <form>
+    <div class="form-group name">
+      <!-- <label for="name">Name:</label> -->
+      <input type="text"
+             class="form-control input"
+             id="Key"
+             name="Value"
+             [(ngModel)]="data.Key"
+             placeholder="Key">
+    </div>
+  
+     <div class="form-group position">
+      <!-- <label for="position">Position:</label> -->
+      <input type="text"
+             class="form-control positionInput"
+             id="Value"
+             name="Value"
+             [(ngModel)]="data.Value"
+             placeholder="Value">
+    </div>
+    <div class="submitBtnContainer">
+      <button type="submit" class="saveBtn" (click)="addEmployee()">SAVE</button>
+    </div>
   </form>
-<!-- PUT THIS CODE IN YOUR HTML FILE -->
-<div>
-    <mat-form-field appearance="fill">
-      <mat-label>Queue Name</mat-label>
-      <mat-select (selectionChange)="applyFilterSearchData($event.value)"  name="Queue Name">
-        <mat-option *ngFor="let obj of optionValues" [value]="obj">
-          {{obj}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+  </div>
+  </div>
+  
+  
+  <div class="tableWrapper">
+  <div class="containerTitle">
+    <div class="oneTitle">Key</div>
+    <div class="twoTitle">Value</div>
+    <div class="threeTitle">Actions</div>
+    <!-- <div class="four"></div> -->
+  </div>
+  
+  <div class="containerListItems" *ngFor="let config of basicConfig; let i = index" >
+    <div class="one">{{config.Key}}</div>
+    <div class="two">{{config.Value}}</div>
+    <div class="three">
+      <button (click)="editConfig(i)">Edit</button>
+      <button (click)="deleteEmployee(i)">Delete</button>
+    </div>
+    <!-- <div class="four"></div> -->
   </div>
 
-    &nbsp; &nbsp; &nbsp; &nbsp;
 
-  <div class="example-container mat-elevation-z8" #TABLE>
-  <mat-table #table [dataSource]="dataSource"   matSort>
-
-  <!-- entID Column -->
-  <ng-container matColumnDef="entID" >
-    <mat-header-cell  *matHeaderCellDef mat-sort-header> AD-Ent ID </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.entID}} </mat-cell>
-  </ng-container>
-
-  <!-- queueName Column -->
-  <ng-container matColumnDef="queueName">
-    <mat-header-cell *matHeaderCellDef mat-sort-header> Queue Name </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.queueName}} </mat-cell>
-  </ng-container>
-
-  <!-- queueManager Column -->
-  <ng-container matColumnDef="queueManager">
-    <mat-header-cell *matHeaderCellDef mat-sort-header> Queue Manager </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.queueManager}} </mat-cell>
-  </ng-container>
-
-  <ng-container matColumnDef="messageID">
-    <mat-header-cell *matHeaderCellDef mat-sort-header> Message ID </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.messageID}} </mat-cell>
-  </ng-container>
-
-   <!-- logTime Column -->
-  <ng-container matColumnDef="logTime">
-    <mat-header-cell *matHeaderCellDef mat-sort-header> logTime </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.logTime | date: 'dd/MM/yyyy hh:mm:ss a'}} </mat-cell>
-  </ng-container>
-
-  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-</mat-table>
-
-<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-</div>
-  <button mat-raised-button color="primary" class="primary" (click)="ExportTOExcel()">Export as Excel</button>
-<div>
-</div>
-
+  
+  </div>
+  
+  
+  
+  <div class="editEmployeeTitleContainer">
+    <div class="">Edit Basic Congiguration</div>
+  </div>
+  
+  <form>
+    <div class="form-group name">
+      <!-- <label for="name">Name:</label> -->
+      <input type="text"
+             class="form-control"
+             id="Key"
+             name="Key"
+             [(ngModel)]="model2.Key"
+             placeholder="Key">
+    </div>
+  
+     <div class="form-group position">
+      <!-- <label for="position">Position:</label> -->
+      <input type="text"
+             class="form-control"
+             id="Value"
+             name="Value"
+             [(ngModel)]="model2.Value"
+             placeholder="Value">
+    </div>
+    <button type="submit" (click)="updateEmployee()">Update</button>
+  </form>
